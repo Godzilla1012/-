@@ -24,9 +24,10 @@ TreeNode* CreatTree() {
 	root->right = CreatTree();
 	return root;
 }
-void InThreading(TreeNode* p,TreeNode* pre) {
+TreeNode* pre;
+void InThreading(TreeNode* p) {
 	if (p) {
-		InThreading(p->left, pre);
+		InThreading(p->left);
 		if (!p->left) {         //前继线索
 			p->LTag = 0;
 			p->left = pre;
@@ -42,12 +43,12 @@ void InThreading(TreeNode* p,TreeNode* pre) {
 			pre->RTag = 1;
 		}
 		pre = p;
-		InThreading(p->right,pre);
+		InThreading(p->right);
 	}
 }
 TreeNode* InOrderThreading(TreeNode* T) {
 	TreeNode* Thrt = (TreeNode*)malloc(sizeof(TreeNode));
-	TreeNode* pre;
+	
 	
 	Thrt->LTag=1;
 	Thrt->RTag = 0;
@@ -55,10 +56,8 @@ TreeNode* InOrderThreading(TreeNode* T) {
 	if (!T)Thrt->left = Thrt; //如果二叉树空,左指针回指
 	else {
 		Thrt->left = T;
-		T->LTag = 1;
-		T->RTag = 1;
 		pre = Thrt;
-		InThreading(T,Thrt);
+		InThreading(T);
 		pre->right = Thrt;
 		pre->RTag = 0;
 		Thrt->right = pre;
